@@ -1,8 +1,20 @@
 :root {
     font-size: 16px;
+    --brand-purple: #5A3F59;
 }
 
 body {
     margin: 0px;
     padding: 0px;
+    width: 100vw;
+    height: 100vh;
+    font-family: 'Inter', 'Helvetica', sans-serif;
+    background-color: var(--brand-purple);
+    display: flex;
+    flex-direction: column;
+
+    > * {
+        background-color: transparent;
+    }
+}
 }
