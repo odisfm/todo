@@ -40,4 +40,8 @@ header {
         }
     }
 }
+
+#content {
+    background-color: #eee;
+    height: 100%;
 }
