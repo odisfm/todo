@@ -10,6 +10,19 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
   },
   devtool: 'inline-source-map',
+  devServer: {
+    static: './dist',
+    open:
+    {
+      app:
+      {
+        name: 'Google Chrome'
+      }
+    }
+  },
+  // optimization: {
+  //   runtimeChunk: 'single'
+  // },
   plugins: [
     new HtmlWebpackPlugin({
         template: './src/index.html',
