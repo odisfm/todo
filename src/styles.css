@@ -17,4 +17,8 @@ body {
         background-color: transparent;
     }
 }
+@font-face {
+    font-family: 'Inter';
+    src: url(./font/Inter.ttf);
+}
 }
