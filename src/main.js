@@ -1,4 +1,5 @@
 import Stylesheet from './styles.css'
+import TodoCSS from './todo.css'
 
 //// CLEARS LOCAL STORAGE
 //localStorage.removeItem('todos');
@@ -14,12 +15,6 @@ library.initialise();
 
 DOM.drawAllTodos();
 
-//DOM.applyProjectFilter('hello');
 DOM.applyTimeFilter(user.state.timeFilter);
 DOM.applyProjectFilter();
 DOM.applyPriorityFilter()
-//DOM.applyProjectFilter('work');
-
-//console.log(library.list)
-
-//library.sortList('dueDate', 'ascending');
