@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "webpack --watch",
     "build": "webpack",
-    "start": "webpack serve --open"
+    "serve": "webpack serve --open"
   },
   "author": "",
   "license": "ISC",
@@ -18,5 +18,15 @@
     "webpack": "^5.92.1",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.0.4"
+  },
+  "dependencies": {
+    "browserify-zlib": "^0.2.0",
+    "chrono-node": "^2.7.6",
+    "crypto-browserify": "^3.12.0",
+    "date-fns": "^3.6.0",
+    "path-browserify": "^1.0.1",
+    "stream-browserify": "^3.0.0",
+    "util": "^0.12.5",
+    "uuid": "^10.0.0"
   }
 }

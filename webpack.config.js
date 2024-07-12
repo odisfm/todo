@@ -12,13 +12,16 @@ module.exports = {
   devtool: 'inline-source-map',
   devServer: {
     static: './dist',
+    hot: false,
+    liveReload: true,
     open:
     {
       app:
       {
         name: 'Google Chrome'
       }
-    }
+    },
+    watchFiles: ['src/**/*.html'],
   },
   // optimization: {
   //   runtimeChunk: 'single'

@@ -1,3 +1,5 @@
+import library from './library.js';
+
 import Card from './card.js'
 
 import { v4 as getUUID } from 'uuid';
@@ -5,57 +7,82 @@ import { v4 as getUUID } from 'uuid';
 import * as chrono from 'chrono-node'
 
 
-export class Todo {
-    constructor(id = getUUID(), title, description = null, dueDate = null, createdDate = new Date(), completed = false, priority = null, checklist = null){
+export default class Todo {
+    constructor(id = getUUID(), title = null, description = null, dueDate = null, createdDate = new Date(), completed = false, priority = 'low', checklist = [], projects = [], closed = true, _dueDate){
         this.id = id;
         this.title = title;
-        this.description = description;
+        if (_dueDate){
+            dueDate = _dueDate;
+        }
         this.dueDate = dueDate;
         this.createdDate = createdDate;
         this.completed = completed;
         this.priority = priority;
         this.checklist = checklist;
-        this.closed = false;
+        this.projects = projects;
+        this.closed = closed;
+        // this.buildCard()
     }
 
     set dueDate(input){
-        if (input === null || input instanceof Date){
+        if (input === null || typeof(input) === Date){
             this._dueDate = input;
-            return
-            
+            return    
         }
-        let attempt = this.parseDueDate(input);
+
+        let attempt = this._parseDueDate(input);
         if (attempt){
-            this._dueDate = attempt
+            this._dueDate = attempt;
+            library.updateListInStorage();
             return
         }
-        attempt = this.parseDueDate(`in ${input}`);
+        attempt = this._parseDueDate(`in ${input}`);
         if (attempt){
-            this._dueDate = attempt
+            this._dueDate = attempt;
+            library.updateListInStorage();
             return
-        }
-        
-        
+        }        
     }
 
     get dueDate(){
         return this._dueDate;
     }
 
-    parseDueDate(input){
-        console.log(`parsing due date ${input}`);
-        let parseAttempt = chrono.parseDate(input);
+    set title(input){
+        if (typeof(input) === 'string'){
+            input = input.trim();
+        }
+        this._title = input;
+    }
+
+    get title(){
+        return this._title;
+    }
+
+    incrementPriority(){
+        if (this.priority === 'low'){
+            this.priority = 'medium';
+        }else if (this.priority === 'medium'){
+            this.priority = 'high';
+        }else if (this.priority === 'high'){
+            this.priority = 'low';
+        }
+        library.updateListInStorage();
+    }
+
+
+    _parseDueDate(input){
+        const today = new Date()
+        let parseAttempt = chrono.parseDate(input, today,{forwardDate: true});
         //console.log(parseAttempt)
         if (parseAttempt){
-            console.log(`date ${input} was valid`)
+            //console.log(`date ${input} was valid`)
             return parseAttempt
         }
         return false
     }
 
-    buildCard(){
-        this.card = new Card(this)
-        console.log(this)
-        console.log(this.card)
-    }
+    // buildCard(){
+    //     this.card = new Card(this)
+    // }
 }
