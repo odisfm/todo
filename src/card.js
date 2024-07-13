@@ -15,7 +15,7 @@ export default class Card{
     }
 
     assignElement(element){
-        //console.log('assining element')
+        //console.log('assigning element')
         this.element = {
             reference: element,
             header: element.querySelector('.todo-header'),
@@ -449,8 +449,8 @@ export default class Card{
     }
 
     drawCheckItem(item, brandNew = false, element = false){
-        console.log('drawing check item');
-        console.log({item})
+        //console.log('drawing check item');
+        //console.log({item})
         const checkItem = document.createElement('div');
         checkItem.dataset.id = item.id;
         checkItem.classList.add('todo-check-item');
@@ -497,7 +497,7 @@ export default class Card{
             
 
     processNewCheckItemTitle(itemID){
-        console.log(this);
+        //console.log(this);
         const todo = library.getTodoByID(this.id);
         const itemObject = todo.getCheckItemByID(itemID);
         const itemElement = this.element.checkList.querySelector(`[data-id="${itemID}"]`);

@@ -22,3 +22,5 @@ DOM.applyPriorityFilter()
 library.sortList(undefined, undefined);
 
 DOM.applySort();
+
+console.log('Made by Odis during The Odin Project');

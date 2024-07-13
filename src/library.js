@@ -14,9 +14,9 @@ class Library {
     }
 
     initialise(){
-        console.log('initialising library')
+        //console.log('initialising library')
         const storage = this.retrieveTodosFromStorage();
-        console.log(storage)
+        //console.log(storage)
         this.buildAllTodos(storage);
         this.buildProjectReference();
         //this.buildProjectReference();
@@ -25,10 +25,10 @@ class Library {
     retrieveTodosFromStorage(){
         const storage = localStorage.getItem('todos');
         if (storage === null){
-            console.log('no todos found in storage')
+            //console.log('no todos found in storage')
             return [];
         }else{
-            console.log('found todos in storage')
+            //console.log('found todos in storage')
             return JSON.parse(storage);
         }
         
@@ -37,14 +37,14 @@ class Library {
     }
 
     updateListInStorage(){
-        console.log('Updating storage')
-        console.log(this.list);
+        //console.log('Updating storage')
+        //console.log(this.list);
         const stringed = JSON.stringify(this.list);
         localStorage.setItem('todos', stringed)
     }
 
     buildTodo(object = {}, brandNew = false){
-        console.log('building todo')
+        //console.log('building todo')
         const todo = new Todo(object.id, object._title, object.description, object.dueDate, object.createdDate, object.completed, object.priority, object.checklist, object.projects, object.closed, object._dueDate);
         if (brandNew && user.state.projectFilter !== null){
             todo.projects = [user.state.projectFilter];
@@ -62,7 +62,7 @@ class Library {
     }
 
     buildAllTodos(storage){
-        console.log(`building ${storage.length} todo(s)`)
+        //console.log(`building ${storage.length} todo(s)`)
         for (const todo of storage){
             this.buildTodo(todo)
         }
@@ -157,7 +157,7 @@ class Library {
             order = user.state.sortOrder;
         }
 
-        console.log(`sorting by ${attribute} ${order}`)
+        //console.log(`sorting by ${attribute} ${order}`)
 
         //console.log(this.list)
 
@@ -256,7 +256,7 @@ class Library {
 
         this.updateListInStorage();
 
-        console.log(this.list)
+        //console.log(this.list)
     }
 }
 

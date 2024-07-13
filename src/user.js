@@ -16,14 +16,14 @@ class User{
     retrieveUserFromStorage(){
         const storage = localStorage.getItem('user');
         if (storage === null){
-            console.log(`no user in storage`)
+            //console.log(`no user in storage`)
             return false;
         }
         return JSON.parse(storage);
     }
 
     updateUserInStorage(){
-        console.log('Updating user storage')
+        //console.log('Updating user storage')
         const stringed = JSON.stringify(this.state);
         localStorage.setItem('user', stringed)
     }

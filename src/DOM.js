@@ -44,7 +44,7 @@ class DOM{
                 document.querySelector('#priority-button-high').classList.add('active');
                 break;
         }
-        console.log(user.state)
+        //console.log(user.state)
         const sortOrderToggle = document.querySelector('#sort-order-toggle');
         sortOrderToggle.dataset.currently = user.state.sortOrder;
         sortOrderToggle.addEventListener('click', (e) => {
@@ -221,7 +221,7 @@ class DOM{
         //console.log('entering time filter switch')
         switch (period){
             case 'all':
-                console.log('Applying active class to: All');
+                //console.log('Applying active class to: All');
                 this.button.filterTimeAll.classList.add('active');
                 break;
             case 'today':
@@ -240,7 +240,7 @@ class DOM{
             let elementID = element.dataset.id;
             let todo = library.getTodoByID(elementID);
             let timeDifference = differenceInDays(todo.dueDate, new Date())
-            console.log(timeDifference)
+            //console.log(timeDifference)
             switch (period){
                 case 'today':
                     if (!isToday(todo.dueDate)){
@@ -280,19 +280,19 @@ class DOM{
             document.querySelectorAll('.todo').forEach((element) => element.removeAttribute('priority-filtered'));
             return;
         }
-        console.log(`applying priority filter ${priority}`)
+        //console.log(`applying priority filter ${priority}`)
         const elements = Array.from(this.content.querySelectorAll('.todo'));
         for (const element of elements){
             let elementID = element.dataset.id;
             let todo = library.getTodoByID(elementID);
-            console.log(todo)
-            console.log(`todo priority ${todo.priority} | filter priority ${priority}`)
+            //console.log(todo)
+            //console.log(`todo priority ${todo.priority} | filter priority ${priority}`)
             if (todo.priority !== priority){
                 element.setAttribute('priority-filtered', '')
-                console.log('filtering')
+                //console.log('filtering')
             }else{
                 element.removeAttribute('priority-filtered');
-                console.log('unfiltering')
+                //console.log('unfiltering')
             }
         }
     }
