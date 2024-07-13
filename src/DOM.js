@@ -47,19 +47,7 @@ class DOM{
         //console.log(user.state)
         const sortOrderToggle = document.querySelector('#sort-order-toggle');
         sortOrderToggle.dataset.currently = user.state.sortOrder;
-        sortOrderToggle.addEventListener('click', (e) => {
-            e.preventDefault();
-            let newOrder = '';
-            if (user.state.sortOrder === 'ascending'){
-                newOrder = 'descending';
-            }else{
-                newOrder = 'ascending';
-            }
-            sortOrderToggle.dataset.currently = newOrder;
-            user.updateSortOrder(newOrder);
-            library.sortList(undefined, undefined);
-            this.applySort();
-        });
+        sortOrderToggle.addEventListener('click', (e) => this.toggleSortOrder(e));
         this.applySortListeners();
         switch (user.state.sortAttribute){
             case 'date':
@@ -132,7 +120,11 @@ class DOM{
         sortDate.addEventListener('click', (e) => {
             sortDate.classList.add('active');
             sortPriority.classList.remove('active');
-            sortTitle.classList.remove('active');
+            sortTitle.classList.remove('active'); 
+            if (user.state.sortAttribute !== 'date'){
+                user.updateSortOrder('ascending');
+                document.querySelector('#sort-order-toggle').dataset.currently = 'ascending';
+            }
             user.updateSortAttribute('date');
             library.sortList(undefined, undefined);
             this.applySort();
@@ -141,7 +133,11 @@ class DOM{
         sortPriority.addEventListener('click', (e) => {
             sortPriority.classList.add('active');
             sortDate.classList.remove('active');
-            sortTitle.classList.remove('active');
+            sortTitle.classList.remove('active');  
+            if (user.state.sortAttribute !== 'priority'){
+                user.updateSortOrder('descending');
+                document.querySelector('#sort-order-toggle').dataset.currently = 'descending';
+            }
             user.updateSortAttribute('priority');
             library.sortList(undefined, undefined);
             this.applySort();
@@ -334,6 +330,20 @@ class DOM{
         }
         
     }
+
+    toggleSortOrder(e){
+        e.preventDefault();
+        let newOrder = '';
+        if (user.state.sortOrder === 'ascending'){
+            newOrder = 'descending';
+        }else{
+            newOrder = 'ascending';
+        }
+        document.querySelector('#sort-order-toggle').dataset.currently = newOrder;
+        user.updateSortOrder(newOrder);
+        library.sortList(undefined, undefined);
+        this.applySort();
+    };
 }
 
 export default new DOM()
