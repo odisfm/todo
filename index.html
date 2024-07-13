@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo</title>
+    <style>
+        body {
+            background-color: #5A3F59;
+            > * {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div id="logo-box">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="#e8eaed" preserveAspectRatio="xMidYMid meet" height="50px" width="50px"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q65 0 123 19t107 53l-58 59q-38-24-81-37.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-18-2-36t-6-35l65-65q11 32 17 66t6 70q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-216L254-466l56-56 114 114 400-401 56 56-456 457Z"/></svg>
+            <div id="logotype">
+                Todo
+            </div>
+        </div>
+        <div id="demo-prompt">
+            <span>Load some demo data?</span>
+            <div class="button-group">
+                <button id="load-demo-button">Load</button>
+                <button id="dismiss-demo-button">Dismiss</button>
+            </div>
+        </div>
+    </header> 
+    <div id="sidebar-wrapper">
+        <div id="sidebar">
+            <h1>Due date</h1>
+            <ul id="time-filters">
+                <li><button id="filter-time-all">All</button></li>
+                <li><button id="filter-time-today">Today</button></li>
+                <li><button id="filter-time-week">This week</button></li>
+                <li><button id="filter-time-month">This month</button></li>
+            </ul>
+            <h1>Priority</h1>
+                <div id="priority-button-group">
+                    <button id="priority-button-all" class="priority-button">All</button>
+                    <button id="priority-button-low" class="priority-button">Low</button>
+                    <button id="priority-button-medium" class="priority-button">Medium</button>
+                    <button id="priority-button-high" class="priority-button">High</button>
+                </div>
+            <h1>Projects</h1>
+            <button id="show-all-projects">Show all</button>
+            <ul id="project-filters">
+
+            </ul>
+        </div>
+    </div>
+    <div id="toolbar">
+        <div id="sort-button-group">
+            <span>sort by</span>
+            <button id="sort-by-date" class="sort-button">date</button>
+            <button id="sort-by-priority" class="sort-button">priority</button>
+            <button id="sort-by-title" class="sort-button">title</button>
+        </div>
+        <button id="sort-order-toggle" data-currently="ascending"></button>
+        <button id="new-todo-button">+ new todo</button>  
+    </div>
+    <div id="content">
+        <div id="only-filtered-alert" class="no-content-alert">
+            <div class="top-text">All items are hidden by filters!</div>
+            <div class="bottom-text">You can change filters from the sidebar on the left.
+                <button id="remove-all-filters">Clear filters</button>
+            </div>
+        </div>
+        <div id="no-todos-alert" class="no-content-alert">
+            <div class="top-text">You have no todos!</div>
+            <div class="bottom-text">Add one with the button above!</div>
+        </div>
+    </div>
+<script defer src="bundle.js"></script></body>
+</html>
