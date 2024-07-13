@@ -2,21 +2,23 @@ import Todo from './todo.js'
 import Card from './card.js'
 import DOM from './DOM.js';
 import user from './user.js';
+import { isSameDay } from 'date-fns';
 
 class Library { 
     constructor(){
         this.list = [];
         this.projectReference = [];
         //console.log(this.list)
-        document.querySelector('#new-todo-button').addEventListener('click', () => this.buildTodo(undefined, true))
+        document.querySelector('#new-todo-button').addEventListener('click', () => this.buildTodo(undefined, true));
         
     }
 
     initialise(){
         console.log('initialising library')
-        this.list = this.retrieveTodosFromStorage();
-        console.log(this.list)
-        this.buildAllTodos();
+        const storage = this.retrieveTodosFromStorage();
+        console.log(storage)
+        this.buildAllTodos(storage);
+        this.buildProjectReference();
         //this.buildProjectReference();
     }
 
@@ -42,23 +44,26 @@ class Library {
     }
 
     buildTodo(object = {}, brandNew = false){
+        console.log('building todo')
         const todo = new Todo(object.id, object._title, object.description, object.dueDate, object.createdDate, object.completed, object.priority, object.checklist, object.projects, object.closed, object._dueDate);
-        this.list.push(todo);
         if (brandNew && user.state.projectFilter !== null){
             todo.projects = [user.state.projectFilter];
         }
-        todo.card = new Card(todo);
+        this.list.push(todo);
+        todo.buildCard()
+        todo.card.assignElement(todo.card.element);
         if (brandNew){
-            todo.card.assignElement(todo.card.element);
             content.prepend(todo.card.element.reference);
             todo.card.element.titleInput.focus();
             this.updateListInStorage();
+        }else{
+            //content.appendChild(todo.card.element.reference)
         }
     }
 
     buildAllTodos(storage){
-        console.log(`building ${this.list.length} todo(s)`)
-        for (const todo of this.list){
+        console.log(`building ${storage.length} todo(s)`)
+        for (const todo of storage){
             this.buildTodo(todo)
         }
     }
@@ -144,17 +149,39 @@ class Library {
 
     sortList(attribute, order){
 
-        console.log(this.list)
+        if (attribute === undefined){
+            attribute = user.state.sortAttribute;
+        }
+
+        if (order === undefined){
+            order = user.state.sortOrder;
+        }
+
+        console.log(`sorting by ${attribute} ${order}`)
+
+        //console.log(this.list)
 
         const sortByDueDate = () => {
             this.list.sort((a, b) => {
                 const dateA = a.dueDate;
                 const dateB = b.dueDate;
 
+                // if (isSameDay(dateA, dateB)){
+                //     return 0
+                // }
+
+                if (dateA === null && dateB === null){
+                    return 0
+                }
+
                 if (dateA < dateB){
                     return -1;
                 }else if( dateA > dateB){
                     return 1;
+                }else if(dateA instanceof Date && dateB === null){
+                    return 1
+                }else if(dateB instanceof Date && dateA === null){
+                    return -1
                 }else{
                     return 0
                 }
@@ -189,10 +216,23 @@ class Library {
             })
         }
 
-        if (attribute === 'dueDate' && order === 'ascending'){
+        const sortByTitle = () => {
+            this.list.sort((a, b) => {
+                if (typeof(a.title) === 'string' && b.title === null){
+                    return -1
+                }else if (typeof(b.title) === 'string' && a.title === null){
+                    return 1
+                }else if (a.title === null && b.title === null){
+                    return 0
+                }
+                return a.title.localeCompare(b.title);
+            })
+        }
+
+        if (attribute === 'date' && order === 'ascending'){
             sortByPriority();
             sortByDueDate();
-        }else if (attribute === 'dueDate' && order === 'descending'){
+        }else if (attribute === 'date' && order === 'descending'){
             sortByPriority();
             sortByDueDate();
             this.list.reverse();
@@ -203,6 +243,15 @@ class Library {
         }else if (attribute === 'priority' && order === 'descending'){
             sortByDueDate();
             sortByPriority();
+        }else if (attribute === 'title' && order === 'ascending'){
+            sortByPriority();
+            sortByDueDate();
+            sortByTitle();
+        }else if (attribute === 'title' && order === 'descending'){
+            sortByPriority();
+            sortByDueDate();
+            sortByTitle();
+            this.list.reverse();
         }
 
         this.updateListInStorage();

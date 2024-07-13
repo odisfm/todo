@@ -3,7 +3,9 @@ class User{
         this.state = {
             projectFilter: null,
             timeFilter: 'all',
-            priorityFilter: null, 
+            priorityFilter: null,
+            sortAttribute: 'date',
+            sortOrder: 'ascending'
         }
         let storage = this.retrieveUserFromStorage();
         if (storage){
@@ -38,6 +40,16 @@ class User{
 
     updatePriorityFilter(priority){
         this.state.priorityFilter = priority;
+        this.updateUserInStorage();
+    }
+
+    updateSortAttribute(attribute){
+        this.state.sortAttribute = attribute;
+        this.updateUserInStorage();
+    }
+    
+    updateSortOrder(order){
+        this.state.sortOrder = order;
         this.updateUserInStorage();
     }
 }

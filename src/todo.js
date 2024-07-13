@@ -14,6 +14,7 @@ export default class Todo {
         if (_dueDate){
             dueDate = _dueDate;
         }
+        this.description = description;
         this.dueDate = dueDate;
         this.createdDate = createdDate;
         this.completed = completed;
@@ -21,7 +22,7 @@ export default class Todo {
         this.checklist = checklist;
         this.projects = projects;
         this.closed = closed;
-        // this.buildCard()
+        //this.buildCard()
     }
 
     set dueDate(input){
@@ -30,13 +31,13 @@ export default class Todo {
             return    
         }
 
-        let attempt = this._parseDueDate(input);
+        let attempt = Todo._parseDueDate(input);
         if (attempt){
             this._dueDate = attempt;
             library.updateListInStorage();
             return
         }
-        attempt = this._parseDueDate(`in ${input}`);
+        attempt = Todo._parseDueDate(`in ${input}`);
         if (attempt){
             this._dueDate = attempt;
             library.updateListInStorage();
@@ -70,8 +71,7 @@ export default class Todo {
         library.updateListInStorage();
     }
 
-
-    _parseDueDate(input){
+    static _parseDueDate(input){
         const today = new Date()
         let parseAttempt = chrono.parseDate(input, today,{forwardDate: true});
         //console.log(parseAttempt)
@@ -82,7 +82,23 @@ export default class Todo {
         return false
     }
 
-    // buildCard(){
-    //     this.card = new Card(this)
-    // }
+    buildCard(){
+         this.card = new Card(this)
+    }
+
+    getCheckItemByID(id){
+        for (let item of this.checklist){
+            if (item.id === id){
+                return item
+            }
+        }
+    }
+
+    removeCheckItemByID(id){
+        for (let i = 0; i < this.checklist.length; i++){
+            if (this.checklist[i].id === id){
+                this.checklist.splice(i, 1);
+            }
+        }
+    }
 }

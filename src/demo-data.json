@@ -1,0 +1,201 @@
+[
+    {
+      "id": "caac47e2-a218-4b3c-9e4a-ebb4aa3b57d0",
+      "_title": "set up todo app on github pages",
+      "description": null,
+      "_dueDate": "2024-07-12T01:40:10.735Z",
+      "createdDate": "2024-07-13T01:31:56.400Z",
+      "completed": true,
+      "priority": "high",
+      "checklist": [],
+      "projects": [
+        "work"
+      ],
+      "closed": true,
+      "card": {
+        "id": "caac47e2-a218-4b3c-9e4a-ebb4aa3b57d0",
+        "element": {
+          "reference": {},
+          "header": {},
+          "title": {},
+          "titleInput": {},
+          "dueDate": {},
+          "dueDateInput": {},
+          "checkBox": {},
+          "body": {},
+          "description": {},
+          "descriptionInput": {},
+          "checkList": {},
+          "checkListAdd": {},
+          "footer": {},
+          "priority": {},
+          "projects": {},
+          "projectsInput": {},
+          "deleteButton": {}
+        }
+      }
+    },
+    {
+      "id": "775aa65f-3ef4-4a89-943c-dd379b16f4f8",
+      "_title": "click any label to edit it",
+      "description": null,
+      "_dueDate": "2024-07-13T01:40:06.003Z",
+      "createdDate": "2024-07-13T01:20:24.203Z",
+      "completed": false,
+      "priority": "high",
+      "checklist": [],
+      "projects": [
+        "tutorial"
+      ],
+      "closed": true,
+      "card": {
+        "id": "775aa65f-3ef4-4a89-943c-dd379b16f4f8",
+        "element": {
+          "reference": {},
+          "header": {},
+          "title": {},
+          "titleInput": {},
+          "dueDate": {},
+          "dueDateInput": {},
+          "checkBox": {},
+          "body": {},
+          "description": {},
+          "descriptionInput": {},
+          "checkList": {},
+          "checkListAdd": {},
+          "footer": {},
+          "priority": {},
+          "projects": {},
+          "projectsInput": {},
+          "deleteButton": {}
+        }
+      }
+    },
+    {
+      "id": "a428111c-ebb4-4a74-b7a9-10cdb12373bd",
+      "_title": null,
+      "description": "you can set due dates with language like 'tomorrow' or '3 weeks'",
+      "_dueDate": "2024-07-14T01:40:14.316Z",
+      "createdDate": "2024-07-13T01:20:50.352Z",
+      "completed": true,
+      "priority": "low",
+      "checklist": [],
+      "projects": [
+        "tutorial"
+      ],
+      "closed": false,
+      "card": {
+        "id": "a428111c-ebb4-4a74-b7a9-10cdb12373bd",
+        "element": {
+          "reference": {},
+          "header": {},
+          "title": {},
+          "titleInput": {},
+          "dueDate": {},
+          "dueDateInput": {},
+          "checkBox": {},
+          "body": {},
+          "description": {},
+          "descriptionInput": {},
+          "checkList": {},
+          "checkListAdd": {},
+          "footer": {},
+          "priority": {},
+          "projects": {},
+          "projectsInput": {},
+          "deleteButton": {}
+        }
+      }
+    },
+    {
+      "id": "542b3178-9a24-41e5-900b-ccb4daffa55e",
+      "_title": "add todos to projects",
+      "description": "enter 'work school' in the below text box to add this todo to #work and #school",
+      "_dueDate": "2024-07-15T02:00:00.000Z",
+      "createdDate": "2024-07-13T01:26:55.855Z",
+      "completed": false,
+      "priority": "medium",
+      "checklist": [],
+      "projects": [],
+      "closed": false,
+      "card": {
+        "id": "542b3178-9a24-41e5-900b-ccb4daffa55e",
+        "element": {
+          "reference": {},
+          "header": {},
+          "title": {},
+          "titleInput": {},
+          "dueDate": {},
+          "dueDateInput": {},
+          "checkBox": {},
+          "body": {},
+          "description": {},
+          "descriptionInput": {},
+          "checkList": {},
+          "checkListAdd": {},
+          "footer": {},
+          "priority": {},
+          "projects": {},
+          "projectsInput": {},
+          "deleteButton": {}
+        }
+      }
+    },
+    {
+      "id": "0eece257-bcb9-42f2-b8be-5a53104fce3e",
+      "_title": "the odin project",
+      "description": null,
+      "_dueDate": "2024-10-16T01:28:39.373Z",
+      "createdDate": "2024-07-13T01:28:28.899Z",
+      "completed": false,
+      "priority": "medium",
+      "checklist": [
+        {
+          "title": "prerequisites",
+          "completed": true,
+          "id": "2ea8e78a-51c2-4e9c-80ca-b69452941f9b"
+        },
+        {
+          "title": "foundations",
+          "completed": true,
+          "id": "b7de2084-77f7-43ed-9b5a-46577fe10d5a"
+        },
+        {
+          "title": "intermediate html",
+          "completed": true,
+          "id": "f3afc5de-590c-4e7d-a44c-0391923ba3bd"
+        },
+        {
+          "title": "intermediate javascript",
+          "completed": false,
+          "id": "0fcfe3b7-8dd6-4422-8956-5bc02f69d566"
+        }
+      ],
+      "projects": [
+        "school"
+      ],
+      "closed": false,
+      "card": {
+        "id": "0eece257-bcb9-42f2-b8be-5a53104fce3e",
+        "element": {
+          "reference": {},
+          "header": {},
+          "title": {},
+          "titleInput": {},
+          "dueDate": {},
+          "dueDateInput": {},
+          "checkBox": {},
+          "body": {},
+          "description": {},
+          "descriptionInput": {},
+          "checkList": {},
+          "checkListAdd": {},
+          "footer": {},
+          "priority": {},
+          "projects": {},
+          "projectsInput": {},
+          "deleteButton": {}
+        }
+      }
+    }
+  ]

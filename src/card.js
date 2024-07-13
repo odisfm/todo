@@ -1,8 +1,11 @@
 import library from './library';
 import user from './user.js';
-import DOM from './DOM.js'
+import DOM from './DOM.js';
 
-import { format as formatDate, isToday, isTomorrow, isThisWeek, isThisYear, isWithinInterval } from 'date-fns'
+import { v4 as getUUID } from 'uuid';
+import { format as formatDate, isToday, isTomorrow, isThisWeek, isThisYear, isWithinInterval, differenceInDays } from 'date-fns';
+
+import trashCanIcon from './svg/trash-can-outline.svg'
 
 export default class Card{
     constructor(todo){
@@ -12,7 +15,7 @@ export default class Card{
     }
 
     assignElement(element){
-        console.log('assining element')
+        //console.log('assining element')
         this.element = {
             reference: element,
             header: element.querySelector('.todo-header'),
@@ -24,6 +27,8 @@ export default class Card{
             body: element.querySelector('.todo-body'),
             description: element.querySelector('.todo-description'),
             descriptionInput: element.querySelector('.todo-description-input'),
+            checkList: element.querySelector('.todo-checklist'),
+            checkListAdd: element.querySelector('.todo-checklist-add'),
             footer: element.querySelector('.todo-footer'),
             priority: element.querySelector('.todo-priority'),
             projects: element.querySelector('.todo-projects'),
@@ -40,6 +45,9 @@ export default class Card{
         element.classList.add('todo');
         if (todo.closed){
             element.setAttribute('closed', "")
+        }
+        if (todo.completed){
+            element.setAttribute('completed', '')
         }
         // Header
         const header = document.createElement('header');
@@ -142,33 +150,23 @@ export default class Card{
         // Checklist
         const checkList = document.createElement('div');
         checkList.classList.add('todo-checklist');
-        for (const item in todo.checkList){
-            const checkItem = document.createElement('div');
-            checkItem.dataset.id = item.id;
-            checkItem.classList.add('todo-check-item');
-            if (item.completed){
-                checkItem.setAttribute('completed', '');
-            }
-            const checkItemTitle = document.createElement('button');
-            checkItemTitle.classList.add('todo-check-item-title');
-            checkItemTitle.textContent = item.title;
-            const checkItemTitleInput = document.createElement('input');
-            checkItemTitleInput.classList.add('todo-check-item-title-input');
-            if (!item.title){
-                checkItemTitleInput.setAttribute('placeholder', 'Enter checklist item');
-            }else{
-                checkItemTitleInput.setAttribute('placeholder', item.title);
-            }
-            const checkItemButton = document.createElement('button');
-            checkItemButton.classList.add('todo-check-item-button');
-            checkItem.appendChild(checkItemTitle);
-            checkItem.appendChild(checkItemTitleInput);
-            checkItem.appendChild(checkItemButton);
-            checkList.appendChild(checkItem);
+        for (const item of todo.checklist){
+            this.drawCheckItem(item, false, checkList);
         }
+        const checkListAddButton = document.createElement('button');
+        checkListAddButton.classList.add('todo-checklist-add');
+        if (todo.checklist.length < 1){
+            checkListAddButton.textContent = '+ add checklist';
+        }else{
+            checkListAddButton.textContent = '+ new item'
+        }
+        checkListAddButton.addEventListener('click', (e) => {
+            this.createNewCheckItem();
+        })
         body.appendChild(description);
         body.appendChild(descriptionInput);
         body.appendChild(checkList);
+        body.appendChild(checkListAddButton);
         // Footer
         const footer = document.createElement('div');
         footer.classList.add('todo-footer');
@@ -201,8 +199,15 @@ export default class Card{
        });
         const deleteButton = document.createElement('button');
         deleteButton.classList.add('todo-delete-button');
-        deleteButton.textContent = 'Delete';
+        //deleteButton.textContent = 'Delete';
         deleteButton.addEventListener('click', () => this.deleteSelf());
+        deleteButton.innerHTML = trashCanIcon
+        // const trashIcon = document.createElement('img');
+        // trashIcon.classList.add('todo-trash-icon');
+        // trashIcon.setAttribute('src', trashCanIcon);
+        // trashIcon.setAttribute('height', '14');
+        // trashIcon.setAttribute('fill', 'green')
+        // deleteButton.append(trashIcon)
         footer.appendChild(priority);
         footer.appendChild(projects);
         footer.appendChild(projectsInput);
@@ -228,7 +233,12 @@ export default class Card{
                 this.element.title.textContent = todo.title;
                 break
             case 'due-date':
+                let pastDate;
                 this.element.dueDate.textContent = this.getHumanDate(todo.dueDate);
+                if (pastDate){
+                    this.element.dueDate.classList.add('past-date')
+                }
+
                 break
             case 'description':
                 this.element.description.textContent = todo.description;
@@ -243,22 +253,17 @@ export default class Card{
     }
 
     getHumanDate(date){
-        // function isWithin7Days(){
-        //     console.log(`checking within 7 days`)
-        //     const today = new Date();
-        //     const oneWeek = new Date();
-        //     oneWeek.setDate(new Date().getDate() + 6)
-        //     console.log(`today: ${today}`)
-        //     console.log(`one week: ${oneWeek}`)
-        //     console.log(isWithinInterval(date, {today, oneWeek}))
-        //     return isWithinInterval(date, {today, oneWeek})
-        // }
-
+        //console.log(date)
+        const timeDifference = differenceInDays(date, new Date())
+        //console.log(timeDifference)
         if (isToday(date)){
             return 'Today'
+        }else if (date < new Date ()){
+            // return second arg if past date
+            return(formatDate(date, 'LLLL do y'))
         }else if (isTomorrow(date)){
             return 'Tomorrow'
-         }else if (isThisWeek(date)){
+         }else if (timeDifference < 7 ){
              return formatDate(date, 'EEEE')
         // }else if (isWithin7Days()){
         //     return formatDate(date, 'EEEE')
@@ -429,6 +434,109 @@ export default class Card{
             }
         }
         return projectList;
+    }
+
+    createNewCheckItem(){
+        const checkItem = {
+            title: null,
+            completed: false,
+            id: getUUID()
+        };
+        this.element.checkListAdd.textContent = '+ new item'
+        library.getTodoByID(this.id).checklist.push(checkItem);
+        this.drawCheckItem(checkItem, true, this.element.checkList);
+        library.updateListInStorage();
+    }
+
+    drawCheckItem(item, brandNew = false, element = false){
+        console.log('drawing check item');
+        console.log({item})
+        const checkItem = document.createElement('div');
+        checkItem.dataset.id = item.id;
+        checkItem.classList.add('todo-check-item');
+        if (item.completed){
+            checkItem.setAttribute('completed', '');
+        }
+        const checkItemTitle = document.createElement('button');
+        checkItemTitle.classList.add('todo-check-item-title');
+        const checkItemTitleInput = document.createElement('input');
+        checkItemTitleInput.classList.add('todo-check-item-title-input');
+        checkItemTitleInput.setAttribute('placeholder', 'Enter checklist item');
+        if (item.title){
+            checkItemTitle.textContent = item.title;
+            checkItemTitleInput.classList.add('hidden');
+            checkItemTitleInput.value = item.title;
+        }else{
+            checkItemTitle.classList.add('hidden');
+        }
+        checkItemTitle.addEventListener('click', (e) => {
+            checkItemTitle.classList.add('hidden');
+            checkItemTitleInput.classList.remove('hidden');
+            checkItemTitleInput.focus();
+        })
+        checkItemTitleInput.addEventListener('focusout', (e) => this.processNewCheckItemTitle(item.id));
+        checkItemTitleInput.addEventListener('keypress', (e) => {
+             let a = e.which || e.keyCode || e.charCode;
+        
+             if (a == 13) {
+                 e.preventDefault();
+                 this.processNewCheckItemTitle(item.id);
+             }  
+        });
+        const checkItemButton = document.createElement('button');
+        checkItemButton.classList.add('todo-check-item-button');
+        checkItemButton.addEventListener('click', (e) => this.toggleCheckItemComplete(item.id, checkItem))
+        checkItem.appendChild(checkItemButton);
+        checkItem.appendChild(checkItemTitle);
+        checkItem.appendChild(checkItemTitleInput);
+        element.appendChild(checkItem);
+        if (brandNew){
+            checkItemTitleInput.focus();
+        }
+    }
+            
+
+    processNewCheckItemTitle(itemID){
+        console.log(this);
+        const todo = library.getTodoByID(this.id);
+        const itemObject = todo.getCheckItemByID(itemID);
+        const itemElement = this.element.checkList.querySelector(`[data-id="${itemID}"]`);
+        const titleInput = itemElement.querySelector('.todo-check-item-title-input');
+        const value = titleInput.value.trim();
+        if (value === ''){
+            todo.removeCheckItemByID(itemID);
+            try{
+                itemElement.remove();
+            }
+            catch (DOMException){
+
+            }
+            if (todo.checklist.length < 1){
+                this.element.checkListAdd.textContent = '+ add checklist';
+            }
+            library.updateListInStorage();
+            return
+        }
+        const titleDisplay = itemElement.querySelector('.todo-check-item-title')
+        titleDisplay.textContent = value;
+        titleInput.classList.add('hidden');
+        titleInput.value = value;
+        titleDisplay.classList.remove('hidden');
+        itemObject.title = value;
+        library.updateListInStorage();
+    }
+
+    toggleCheckItemComplete(itemID, element){
+        const todo = library.getTodoByID(this.id);
+        const item = todo.getCheckItemByID(itemID);
+        if (!item.completed){
+            item.completed = true;
+            element.setAttribute('completed', '')
+        }else{
+            item.completed = false;
+            element.removeAttribute('completed')
+        }
+        library.updateListInStorage();
     }
 }
 

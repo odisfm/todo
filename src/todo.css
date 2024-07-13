@@ -52,13 +52,17 @@
         flex-wrap: wrap;
         cursor: pointer;
 
+        &:hover {
+            background-color: #675067;
+        }
+
         &:focus {
             background-color: #675067;
             outline: none;
         }
 
         .todo-title {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: #fff;
 
             
@@ -75,6 +79,10 @@
 
         .todo-due-date {
             color: #fff;
+
+            &.past-date {
+                opacity: .4;
+            }
         }
 
         .todo-due-date, .todo-due-date-input {
@@ -116,6 +124,11 @@
             &:hover {
                 background-color: var(--danger-red);
             }
+
+            svg {
+                height: 14px;
+                fill: #fff;
+            }
         }
 
     }
@@ -129,6 +142,8 @@
         .todo-description {
             color: #000;
             cursor: pointer;
+            font-size: .9rem;
+            margin-bottom: .5rem;
         }
 
         .todo-description-input {
@@ -141,12 +156,97 @@
             border: 1px solid #eee;
             background-color: #eee;
             box-sizing: border-box;
+
+            &:focus {
+                background-color: #e3e3e3;
+            }
         }
 
         p, ul {
             padding: 0px;
             margin: 0px;
         }
+
+        .todo-checklist {
+
+            .todo-check-item {
+                padding: .5rem 1rem;
+                border-bottom: 1px solid #ddd;
+                display: flex;
+                align-items: center;
+                gap: .5rem;
+
+                &:hover {
+                    background-color: #67506711;
+                }
+
+                &[completed] {
+                    .todo-check-item-title {
+                        text-decoration: line-through;
+                    }
+
+                    .todo-check-item-button {
+                        background-color: var(--brand-purple);
+                    }
+
+                    .todo-check-item-button:hover {
+                        background-color: transparent;
+                    }
+
+                    .todo-check-item-button:hover ~ .todo-check-item-title  {
+                        text-decoration: none;
+                    }
+                }
+
+                &:not([completed]) {
+                    .todo-check-item-button:hover ~ .todo-check-item-title  {
+                        text-decoration: line-through;
+                    }
+
+                    .todo-check-item-button:hover {
+                        background-color: var(--brand-purple);
+                    }
+                }
+
+
+                .todo-check-item-button{
+                    border: 2px solid var(--brand-purple);
+                    border-radius: 50%;
+                    box-sizing: border-box;
+                    height: 1rem;
+                    width: auto;
+                    aspect-ratio: 1/1;
+
+                }
+
+                .todo-check-item-title-input {
+                    background-color: #444;
+                }
+            }
+
+            &:not(:empty){
+                margin-top: .6rem;
+            }
+
+            
+
+        }
+
+        .todo-checklist-add {
+            margin-top: .8rem;
+            align-self: flex-start;
+            padding: .4rem .8rem;
+            background-color: var(--dark-purple);
+            color: #fff;
+
+            &:hover {
+                background-color: var(--brand-purple);
+            }
+        }
+
+        
+
+        
 
         
     }

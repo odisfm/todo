@@ -26,6 +26,7 @@
     "date-fns": "^3.6.0",
     "path-browserify": "^1.0.1",
     "stream-browserify": "^3.0.0",
+    "svg-inline-loader": "^0.8.2",
     "util": "^0.12.5",
     "uuid": "^10.0.0"
   }

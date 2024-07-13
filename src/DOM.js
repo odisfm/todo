@@ -1,7 +1,7 @@
 import library from "./library.js";
 import user from './user.js';
 
-import { isToday, isThisWeek, isThisMonth, isThisYear } from 'date-fns'
+import { isToday, isThisWeek, isThisMonth, isThisYea, differenceInDays } from 'date-fns'
 
 
 class DOM{
@@ -44,27 +44,41 @@ class DOM{
                 document.querySelector('#priority-button-high').classList.add('active');
                 break;
         }
-        // switch (user.state.timeFilter){
-        //     case ('all'):
-        //         document.querySelector('#filter-time-all').classList.add('active');
-        //         break;
-        //     case ('today'):
-        //         document.querySelector('#filter-time-today').classList.add('active');
-        //         break;
-        //     case ('week'):
-        //         document.querySelector('#filter-time-week').classList.add('active');
-        //         break;
-        //     case ('month'):
-        //         document.querySelector('#filter-time-month').classList.add('active');
-        //         break;
-        // }
+        console.log(user.state)
+        const sortOrderToggle = document.querySelector('#sort-order-toggle');
+        sortOrderToggle.dataset.currently = user.state.sortOrder;
+        sortOrderToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            let newOrder = '';
+            if (user.state.sortOrder === 'ascending'){
+                newOrder = 'descending';
+            }else{
+                newOrder = 'ascending';
+            }
+            sortOrderToggle.dataset.currently = newOrder;
+            user.updateSortOrder(newOrder);
+            library.sortList(undefined, undefined);
+            this.applySort();
+        });
+        this.applySortListeners();
+        switch (user.state.sortAttribute){
+            case 'date':
+                document.querySelector('#sort-by-date').classList.add('active');
+                break
+            case 'priority':
+                document.querySelector('#sort-by-priority').classList.add('active');
+                break
+            case 'title':
+                document.querySelector('#sort-by-title').classList.add('active');
+        }
+        
     }
 
     drawAllTodos(){
-        console.log('drawing todos')
-        console.log(library.list);
+        //console.log('drawing todos')
+        //console.log(library.list);
         for (const todo of library.list){
-            console.log(todo.card.element.reference)
+            //console.log(todo.card.element.reference)
             this.content.appendChild(todo.card.element.reference);
             const element = document.querySelector(`[data-id="${todo.id}"]`);
             todo.card.assignElement(element);
@@ -110,6 +124,39 @@ class DOM{
         
     }
 
+    applySortListeners(){
+        const sortDate = document.querySelector('#sort-by-date');
+        const sortPriority = document.querySelector('#sort-by-priority');
+        const sortTitle = document.querySelector('#sort-by-title');
+
+        sortDate.addEventListener('click', (e) => {
+            sortDate.classList.add('active');
+            sortPriority.classList.remove('active');
+            sortTitle.classList.remove('active');
+            user.updateSortAttribute('date');
+            library.sortList(undefined, undefined);
+            this.applySort();
+        })
+
+        sortPriority.addEventListener('click', (e) => {
+            sortPriority.classList.add('active');
+            sortDate.classList.remove('active');
+            sortTitle.classList.remove('active');
+            user.updateSortAttribute('priority');
+            library.sortList(undefined, undefined);
+            this.applySort();
+        })
+
+        sortTitle.addEventListener('click', (e) => {
+            sortTitle.classList.add('active');
+            sortDate.classList.remove('active');
+            sortPriority.classList.remove('active');
+            user.updateSortAttribute('title');
+            library.sortList(undefined, undefined);
+            this.applySort();
+        })
+    }
+
     applyProjectFilter(filteredProject){
         if (filteredProject === undefined){
             filteredProject = user.state.projectFilter;
@@ -153,7 +200,7 @@ class DOM{
     }
 
     applyTimeFilter(period){
-        console.log('applying time filter')
+        //console.log('applying time filter')
 
         if (period == undefined){
             period = user.state.applyTimeFilter;
@@ -171,7 +218,7 @@ class DOM{
             button.classList.remove('active');
         })
 
-        console.log('entering time filter switch')
+        //console.log('entering time filter switch')
         switch (period){
             case 'all':
                 console.log('Applying active class to: All');
@@ -192,6 +239,8 @@ class DOM{
         for (const element of elements){
             let elementID = element.dataset.id;
             let todo = library.getTodoByID(elementID);
+            let timeDifference = differenceInDays(todo.dueDate, new Date())
+            console.log(timeDifference)
             switch (period){
                 case 'today':
                     if (!isToday(todo.dueDate)){
@@ -201,17 +250,17 @@ class DOM{
                     }
                     break;
                 case 'week':
-                    if (!isThisWeek(todo.dueDate)){
-                        element.setAttribute('time-filtered', '');
-                    }else{
+                    if ((isThisWeek(todo.dueDate) && timeDifference >= 0) || (timeDifference < 7 && timeDifference >= 0)){
                         element.removeAttribute('time-filtered');
+                    }else{
+                        element.setAttribute('time-filtered', '');
                     }
                     break;
                 case 'month':
-                    if (!isThisMonth(todo.dueDate)){
-                        element.setAttribute('time-filtered', '');
-                    }else{
+                    if ((isThisMonth(todo.dueDate) && timeDifference >= 0)  || (timeDifference < 28 && timeDifference >= 0)){
                         element.removeAttribute('time-filtered');
+                    }else{
+                        element.setAttribute('time-filtered', '');
                     }
                     break;
                 case 'all':
@@ -276,6 +325,14 @@ class DOM{
         projectList.forEach((project) => {
             projectFiltersUL.appendChild(buildButton(project))
         })
+    }
+
+    applySort(){
+        let list = library.list;
+        for (let i = list.length - 1; i >= 0; i--){
+            this.content.prepend(list[i].card.element.reference)
+        }
+        
     }
 }
 
