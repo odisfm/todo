@@ -32,6 +32,7 @@ module.exports = {
         title: 'Development',
         filename: 'index.html',
         inject: 'body',
+        favicon: "./src/ico/favicon.ico"
     })
   ],
   module: {
